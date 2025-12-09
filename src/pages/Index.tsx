@@ -1,13 +1,15 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import POSLayout from "@/components/pos/POSLayout";
+import { Helmet } from "react-helmet-async";
 
 const Index = () => {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
-    </div>
+    <>
+      <Helmet>
+        <title>Quick Shop POS - Fast & Easy Cash Register System</title>
+        <meta name="description" content="Modern point of sale system with intuitive interface, custom pricing, discounts, and receipt printing. Perfect for retail and food service." />
+      </Helmet>
+      <POSLayout />
+    </>
   );
 };
 
