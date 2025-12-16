@@ -1,0 +1,287 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+@layer base {
+  :root {
+    --background: 210 40% 98%;
+    --foreground: 222 47% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    --primary: 174 72% 40%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222 47% 11%;
+
+    --muted: 210 40% 94%;
+    --muted-foreground: 215 16% 47%;
+
+    --accent: 174 60% 45%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 222 47% 11%;
+
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 174 72% 40%;
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 222 47% 11%;
+    --sidebar-primary: 174 72% 40%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 40% 96%;
+    --sidebar-accent-foreground: 222 47% 11%;
+    --sidebar-border: 214 32% 91%;
+    --sidebar-ring: 174 72% 40%;
+
+    /* Custom POS variables */
+    --glass: 0 0% 100% / 0.9;
+    --glass-border: 214 32% 85%;
+    --glow: 174 72% 40% / 0.2;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-card/95 backdrop-blur-xl border border-border shadow-lg;
+  }
+
+  .glow-effect {
+    box-shadow: 0 0 40px hsl(var(--glow));
+  }
+
+  .product-btn {
+    @apply relative overflow-hidden transition-all duration-300 ease-out;
+    @apply active:scale-95 hover:scale-[1.02];
+    @apply bg-card hover:bg-secondary;
+    @apply border border-border hover:border-primary/50;
+    @apply shadow-sm hover:shadow-md;
+  }
+
+  .product-btn::before {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 transition-opacity duration-300;
+  }
+
+  .product-btn:hover::before {
+    @apply opacity-100;
+  }
+
+  .cart-item-enter {
+    animation: slideInRight 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .cart-item-pulse {
+    animation: pulseGlow 0.6s ease-out;
+  }
+
+  .btn-press {
+    @apply transition-transform duration-150 active:scale-95;
+  }
+
+  .receipt-paper {
+    @apply bg-white text-foreground font-mono border border-border;
+  }
+
+  .number-input {
+    @apply bg-card border-2 border-border focus:border-primary transition-colors duration-200;
+    @apply text-center font-mono text-lg;
+  }
+
+  .section-title {
+    @apply text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-3;
+  }
+
+  /* Tab transitions */
+  .tab-screen {
+    @apply absolute inset-0 transition-all duration-500 ease-in-out;
+  }
+
+  .tab-screen-enter {
+    animation: fadeInScale 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+
+  .tab-screen-exit {
+    animation: fadeOutScale 0.4s ease-out forwards;
+  }
+
+  .category-tab {
+    @apply px-4 py-2 rounded-full font-medium text-sm transition-all duration-200;
+    @apply bg-secondary text-muted-foreground hover:bg-secondary/80;
+  }
+
+  .category-tab.active {
+    @apply bg-primary text-primary-foreground shadow-md;
+  }
+}
+
+@layer utilities {
+  @keyframes slideInRight {
+    0% {
+      opacity: 0;
+      transform: translateX(30px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes pulseGlow {
+    0% {
+      box-shadow: 0 0 0 0 hsl(var(--primary) / 0.4);
+    }
+    50% {
+      box-shadow: 0 0 20px 4px hsl(var(--primary) / 0.2);
+    }
+    100% {
+      box-shadow: 0 0 0 0 hsl(var(--primary) / 0);
+    }
+  }
+
+  @keyframes scaleIn {
+    0% {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+
+  @keyframes fadeInScale {
+    0% {
+      opacity: 0;
+      transform: scale(0.95) translateY(10px);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  @keyframes fadeOutScale {
+    0% {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(0.95) translateY(-10px);
+    }
+  }
+
+  @keyframes bounceIn {
+    0% {
+      opacity: 0;
+      transform: scale(0.3);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+    70% {
+      transform: scale(0.9);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .animate-slide-in-right {
+    animation: slideInRight 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .animate-slide-in-up {
+    animation: slideInUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.3s ease-out;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .animate-bounce-in {
+    animation: bounceIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+
+  .stagger-1 { animation-delay: 0.05s; }
+  .stagger-2 { animation-delay: 0.1s; }
+  .stagger-3 { animation-delay: 0.15s; }
+  .stagger-4 { animation-delay: 0.2s; }
+  .stagger-5 { animation-delay: 0.25s; }
+}
+
+/* Print styles */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  .print-receipt,
+  .print-receipt * {
+    visibility: visible;
+  }
+
+  .print-receipt {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    background: white !important;
+    color: black !important;
+    padding: 20px;
+  }
+}
