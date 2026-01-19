@@ -5,6 +5,8 @@ import { useToast } from "@/hooks/use-toast";
 import WelcomeScreen from "./WelcomeScreen";
 import ProductsScreen from "./ProductsScreen";
 import CheckoutScreen from "./CheckoutScreen";
+import EndOfDaySummary, { DailySales } from "./EndOfDaySummary";
+import { type PaymentMethod } from "./CheckoutScreen";
 
 type Screen = "welcome" | "products" | "checkout";
 
@@ -13,6 +15,15 @@ const POSLayout = () => {
   const [cashierName, setCashierName] = useState("");
   const [items, setItems] = useState<CartItem[]>([]);
   const [exitingScreen, setExitingScreen] = useState<Screen | null>(null);
+  const [showEndOfDay, setShowEndOfDay] = useState(false);
+  const [dailySales, setDailySales] = useState<DailySales>({
+    cashTotal: 0,
+    cardTotal: 0,
+    mobileTotal: 0,
+    totalDiscounts: 0,
+    transactionCount: 0,
+    discountedTransactions: 0,
+  });
   const { toast } = useToast();
 
   // Handle screen transitions with fade effect
@@ -104,20 +115,48 @@ const POSLayout = () => {
     setItems((prev) => prev.filter((item) => item.id !== id));
   }, []);
 
-  // Complete sale
-  const completeSale = useCallback(() => {
-    const total = items.reduce(
-      (sum, item) => sum + item.price * item.quantity,
-      0
-    );
-    toast({
-      title: "Sale Completed! 🎉",
-      description: `Total: $${total.toFixed(2)}`,
-      duration: 3000,
+  // Complete sale with payment tracking
+  const completeSale = useCallback(
+    (paymentMethod: PaymentMethod, total: number, discountAmount: number) => {
+      // Update daily sales
+      setDailySales((prev) => ({
+        cashTotal: prev.cashTotal + (paymentMethod === "cash" ? total : 0),
+        cardTotal: prev.cardTotal + (paymentMethod === "card" ? total : 0),
+        mobileTotal: prev.mobileTotal + (paymentMethod === "mobile" ? total : 0),
+        totalDiscounts: prev.totalDiscounts + discountAmount,
+        transactionCount: prev.transactionCount + 1,
+        discountedTransactions:
+          prev.discountedTransactions + (discountAmount > 0 ? 1 : 0),
+      }));
+
+      toast({
+        title: "Sale Completed! 🎉",
+        description: `Total: $${total.toFixed(2)}`,
+        duration: 3000,
+      });
+      setItems([]);
+      transitionTo("products");
+    },
+    [toast]
+  );
+
+  // Reset daily sales
+  const resetDailySales = useCallback(() => {
+    setDailySales({
+      cashTotal: 0,
+      cardTotal: 0,
+      mobileTotal: 0,
+      totalDiscounts: 0,
+      transactionCount: 0,
+      discountedTransactions: 0,
     });
-    setItems([]);
-    transitionTo("products");
-  }, [items, toast]);
+    setShowEndOfDay(false);
+    toast({
+      title: "Daily totals reset",
+      description: "Starting fresh for a new day",
+      duration: 2000,
+    });
+  }, [toast]);
 
   return (
     <div className="relative min-h-screen overflow-hidden">
@@ -148,6 +187,7 @@ const POSLayout = () => {
             onUpdateQuantity={updateQuantity}
             onRemoveItem={removeItem}
             onProceedToCheckout={() => transitionTo("checkout")}
+            onEndOfDay={() => setShowEndOfDay(true)}
           />
         </div>
       )}
@@ -168,6 +208,15 @@ const POSLayout = () => {
             cashierName={cashierName}
           />
         </div>
+      )}
+
+      {/* End of Day Summary Modal */}
+      {showEndOfDay && (
+        <EndOfDaySummary
+          sales={dailySales}
+          onClose={() => setShowEndOfDay(false)}
+          onReset={resetDailySales}
+        />
       )}
     </div>
   );

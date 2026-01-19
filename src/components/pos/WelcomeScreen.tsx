@@ -27,7 +27,7 @@ const WelcomeScreen = ({ onSignIn }: WelcomeScreenProps) => {
           <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-primary/10 mb-4">
             <Store className="w-10 h-10 text-primary" />
           </div>
-          <h1 className="text-3xl font-bold text-foreground mb-2">Quick Shop POS</h1>
+          <h1 className="text-3xl font-bold text-foreground mb-2">Shop Cash Register</h1>
           <p className="text-muted-foreground">Sign in to start your shift</p>
         </div>
 
@@ -87,7 +87,7 @@ const WelcomeScreen = ({ onSignIn }: WelcomeScreenProps) => {
 
         {/* Footer */}
         <p className="text-center text-sm text-muted-foreground mt-6">
-          © 2024 Quick Shop POS System
+          © 2024 Shop Cash Register
         </p>
       </div>
     </div>
