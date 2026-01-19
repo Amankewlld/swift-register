@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Product, products, categories } from "@/data/products";
 import { CartItem } from "@/types/cart";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, ArrowRight, Plus, Minus, Trash2 } from "lucide-react";
+import { ShoppingCart, ArrowRight, Plus, Minus, Trash2, Clock } from "lucide-react";
 import CustomItemForm from "./CustomItemForm";
 
 interface ProductsScreenProps {
@@ -12,6 +12,7 @@ interface ProductsScreenProps {
   onUpdateQuantity: (id: string, delta: number) => void;
   onRemoveItem: (id: string) => void;
   onProceedToCheckout: () => void;
+  onEndOfDay: () => void;
 }
 
 const ProductsScreen = ({
@@ -21,6 +22,7 @@ const ProductsScreen = ({
   onUpdateQuantity,
   onRemoveItem,
   onProceedToCheckout,
+  onEndOfDay,
 }: ProductsScreenProps) => {
   const [activeCategory, setActiveCategory] = useState(categories[0]);
   const [clickedId, setClickedId] = useState<string | null>(null);
@@ -50,11 +52,21 @@ const ProductsScreen = ({
             <h1 className="text-2xl font-bold text-foreground">Select Products</h1>
             <p className="text-muted-foreground">Tap items to add to cart</p>
           </div>
-          <div className="flex items-center gap-2 bg-card border border-border rounded-xl px-4 py-2">
-            <ShoppingCart className="w-5 h-5 text-primary" />
-            <span className="font-semibold">{itemCount} items</span>
-            <span className="text-muted-foreground">|</span>
-            <span className="font-bold text-primary">${subtotal.toFixed(2)}</span>
+          <div className="flex items-center gap-3">
+            <Button
+              variant="outline"
+              onClick={onEndOfDay}
+              className="flex items-center gap-2"
+            >
+              <Clock className="w-4 h-4" />
+              End of Day
+            </Button>
+            <div className="flex items-center gap-2 bg-card border border-border rounded-xl px-4 py-2">
+              <ShoppingCart className="w-5 h-5 text-primary" />
+              <span className="font-semibold">{itemCount} items</span>
+              <span className="text-muted-foreground">|</span>
+              <span className="font-bold text-primary">${subtotal.toFixed(2)}</span>
+            </div>
           </div>
         </header>
 

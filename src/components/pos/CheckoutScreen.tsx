@@ -19,11 +19,13 @@ import Receipt from "./Receipt";
 interface CheckoutScreenProps {
   items: CartItem[];
   onBack: () => void;
-  onCompleteSale: () => void;
+  onCompleteSale: (paymentMethod: PaymentMethod, total: number, discountAmount: number) => void;
   cashierName: string;
 }
 
 type PaymentMethod = "cash" | "card" | "mobile";
+
+export type { PaymentMethod };
 
 const CheckoutScreen = ({
   items,
@@ -56,7 +58,7 @@ const CheckoutScreen = ({
   };
 
   const handleComplete = () => {
-    onCompleteSale();
+    onCompleteSale(paymentMethod, total, discountAmount);
   };
 
   return (
